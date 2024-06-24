@@ -15,9 +15,11 @@ def main():
 
     Hero1 = Hero(30, 30)
     Hero2 = Hero(350, 300)
+    Hero3 = Hero(30, 70)
 
-    model.add_hero(Hero1)
-    model.add_hero(Hero2)
+    model.add_hero(Hero1, 1)
+    model.add_hero(Hero3, 1)
+    model.add_hero(Hero2, 2)
 
     clock = pygame.time.Clock()
     running = True
@@ -26,8 +28,10 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
+        Hero1.logic(model.heroes['team_1'], model.heroes['team_2'])
+        Hero2.logic(model.heroes['team_2'], model.heroes['team_1'])
+
         view.draw()
-        Hero1.logic()
 
         clock.tick(60)
 
