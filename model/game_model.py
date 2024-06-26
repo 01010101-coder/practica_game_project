@@ -1,20 +1,14 @@
-class GameModel: # модель для управления игрой
+from model.hero import Hero
+
+class GameModel:
     def __init__(self):
-        self.heroes = {  # герои команд
-            'team_1': [],
-            'team_2': []
+        self.heroes = {
+            'team_1': [Hero(100, 100), Hero(150, 100)],
+            'team_2': [Hero(100, 300), Hero(150, 300)]
         }
 
-        self.spells_stack = [] # заклинания хода
-
-
-    def add_hero(self, hero, team): # добавить героя в игру
-        if team == 1:
-            self.heroes['team_1'].append(hero)
-        if team == 2:
-            self.heroes['team_2'].append(hero)
-
     def update(self):
-        # Логика обновления состояния игры
-        pass
-
+        for hero in self.heroes['team_1']:
+            hero.logic(self.heroes['team_1'], self.heroes['team_2'])
+        for hero in self.heroes['team_2']:
+            hero.logic(self.heroes['team_2'], self.heroes['team_1'])

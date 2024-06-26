@@ -1,37 +1,23 @@
-# main.py
 import pygame
-from model.game_model import GameModel
-from model.heroes.hero import Hero
-from view.game_view import GameView
 from controller.game_controller import GameController
+from view.main_menu_view import MainMenuState
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("Game Example with MVC and State Management")
 
-    model = GameModel()
-    view = GameView(model, screen)
-    controller = GameController(model)
-
-    Hero1 = Hero(30, 30)
-    Hero2 = Hero(350, 300)
-    Hero3 = Hero(30, 70)
-
-    model.add_hero(Hero1, 1)
-    model.add_hero(Hero3, 1)
-    model.add_hero(Hero2, 2)
+    controller = GameController()
+    controller.set_state(MainMenuState(controller))
 
     clock = pygame.time.Clock()
     running = True
     while running:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+            controller.handle_event(event)
 
-        Hero1.logic(model.heroes['team_1'], model.heroes['team_2'])
-        Hero2.logic(model.heroes['team_2'], model.heroes['team_1'])
-
-        view.draw()
+        controller.update()
+        controller.draw(screen)
 
         clock.tick(60)
 
