@@ -19,8 +19,8 @@ class MainMenuState:
             for button in self.buttons:
                 action = button.click(event)
                 if action == "new_game":
-                    from view.gameplay_view import GameplayState  # ленивый импорт
-                    self.controller.set_state(GameplayState(self.controller))
+                    from view.choose_mode_view import ChooseModeMenu
+                    self.controller.set_state(ChooseModeMenu(self.controller))
                 elif action == "settings":
                     from view.settings_view import SettingsState  # ленивый импорт
                     self.controller.set_state(SettingsState(self.controller))

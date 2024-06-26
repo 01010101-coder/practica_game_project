@@ -7,6 +7,10 @@ class GameModel:
             'team_2': [Hero(100, 300), Hero(150, 300)]
         }
 
+        self.mode = None
+
+        self.round = 0
+
     def update(self):
         for hero in self.heroes['team_1']:
             hero.logic(self.heroes['team_1'], self.heroes['team_2'])
