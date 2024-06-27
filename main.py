@@ -2,13 +2,12 @@ import pygame
 from controller.game_controller import GameController
 from view.main_menu_view import MainMenuState
 
-
 def main():
     pygame.init()
     pygame.font.init()  # Инициализация модуля шрифтов Pygame
 
     # Настройки размеров окна
-    window_width = 800
+    window_width = 1300
     window_height = 600
 
     screen = pygame.display.set_mode((window_width, window_height))
