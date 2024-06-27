@@ -3,7 +3,7 @@ class Hero:
         self.name = "Hero"
         self.hp = 100
         self.damage = 10
-        self.range = 30
+        self.range = 1
         self.move_speed = 5
         self.position = [x, y]
         self.effects = []
@@ -32,5 +32,4 @@ class Hero:
         if not enemy_champ:
             return
         nearest_enemy = min(enemy_champ, key=lambda enemy: self.distance(enemy.position))
-        if self.distance(nearest_enemy.position) > self.range:
-            self.move(nearest_enemy.position)
+        self.move(nearest_enemy.position)
