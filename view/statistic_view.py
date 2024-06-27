@@ -20,6 +20,7 @@ class StatisticMenu:
                    "next_round")
         ]
 
+
         self.game_model.clear_stats()
         self.game_model.insert_stats('team_1', 'Герой_1', 5, 3, 1000, 300, 50)
         self.game_model.insert_stats('team_1', 'Герой_2', 2, 4, 800, 500, 30)
