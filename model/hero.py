@@ -1,7 +1,7 @@
 
 class Hero:
     def __init__(self, x, y):
-        self.hp
+        self.hp = None
         self.damage
         self.speed
         self.attack_time
