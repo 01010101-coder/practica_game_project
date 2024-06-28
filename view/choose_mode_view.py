@@ -1,12 +1,10 @@
 import pygame
 import sys
-from model.game_model import GameModel
 from button import Button
 
 class ChooseModeMenu:
     def __init__(self, controller, window_width, window_height):
         self.controller = controller
-        self.model = GameModel()
         self.window_width = window_width
         self.window_height = window_height
 
@@ -29,13 +27,11 @@ class ChooseModeMenu:
             for button in self.buttons:
                 action = button.click(event)
                 if action == "mode_bo3":
-                    from view.gameplay_view import GameplayState  # ленивый импорт
-                    self.model.mode = "bo3"
-                    self.controller.set_state(GameplayState(self.controller, self.window_width, self.window_height))
+                    from view.pick_menu import PickMenuState  # ленивый импорт
+                    self.controller.set_state(PickMenuState(self.controller, self.window_width, self.window_height, 'bo3'))
                 elif action == "mode_bo5":
-                    from view.gameplay_view import GameplayState  # ленивый импорт
-                    self.model.mode = "bo5"
-                    self.controller.set_state(GameplayState(self.controller, self.window_width, self.window_height))
+                    from view.pick_menu import PickMenuState  # ленивый импорт
+                    self.controller.set_state(PickMenuState(self.controller, self.window_width, self.window_height, 'bo5'))
                 elif action == "back":
                     from view.main_menu_view import MainMenuState  # ленивый импорт
                     self.controller.set_state(MainMenuState(self.controller, self.window_width, self.window_height))

@@ -4,11 +4,13 @@ from model.mage import Mage
 from model.assassin import Assassin
 
 class GameModel:
-    def __init__(self):
+    def __init__(self, team_1, team_2, game_mode):
         self.heroes = {
-            'team_1': [Melee(200, 150), Melee(200, 400)],  # Корректировка координат героев
-            'team_2': [Assassin(500, 150), Assassin(500, 400)]
+            'team_1': team_1,  # Корректировка координат героев
+            'team_2': team_2
         }
+
+        self.game_mode = game_mode
 
         self.scores = [0, 0]
 
