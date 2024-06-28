@@ -4,9 +4,9 @@ import sys
 
 
 class GameplayState:
-    def __init__(self, controller, window_width, window_height):
+    def __init__(self, controller, window_width, window_height, team_1, team_2, game_mode):
         self.controller = controller
-        self.model = GameModel()
+        self.model = GameModel(team_1, team_2, game_mode)
         self.view = GameView(self.model, window_width, window_height)
 
     def handle_event(self, event):

@@ -2,6 +2,7 @@ import pygame
 from controller.game_controller import GameController
 from view.main_menu_view import MainMenuState
 from view.gameplay_view import GameplayState
+from view.pick_menu import PickMenuState
 
 def main():
     pygame.init()
@@ -15,8 +16,7 @@ def main():
     pygame.display.set_caption("Game Example with MVC and State Management")
 
     controller = GameController()
-    # controller.set_state(MainMenuState(controller, window_width, window_height))
-    controller.set_state(GameplayState(controller, window_width, window_height))
+    controller.set_state(MainMenuState(controller, window_width, window_height))
     clock = pygame.time.Clock()
     running = True
     while running:
