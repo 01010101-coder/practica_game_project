@@ -7,7 +7,7 @@ class Hero:
         self.attack_time
         self.range
         self.move_speed
-        self.startpos = [x, y]
+        self.startpos
         self.position
         self.cooldown
         self.countdown
@@ -25,5 +25,5 @@ class Hero:
     def distance(self, enemy_pos):
         return ((self.position[0] - enemy_pos[0]) ** 2 + (self.position[1] - enemy_pos[1]) ** 2) ** 0.5
 
-    def logic(self, ally_champ, enemy_champ):
+    def logic(self, ally_champ, enemy_champ, score):
         pass

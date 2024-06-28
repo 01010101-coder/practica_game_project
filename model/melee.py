@@ -8,12 +8,10 @@ class Melee(Hero):
         self.name = type
         self.hp = 100
         self.damage = 7
-        self.speed = 30 # in ticks
-        self.attack_time = 0
         self.range = 10
         self.move_speed = 1
-        self.startpos = [0, 0]
-        self.position = self.startpos
+        self.startpos = [x, y]
+        self.position = [x, y]
         self.cooldown = 4
         self.spell_time = time.time()
         #effects and variables
@@ -23,6 +21,8 @@ class Melee(Hero):
         self.poisontime = 0
         self.poisoncount = 0
         self.spell = "splash"
+        self.attack_cooldown = 1.0  # Attack every 1 second
+        self.last_attack_time = time.time()
 
     def move(self, target_position):
         if self.position[0] < target_position[0]:
@@ -36,10 +36,11 @@ class Melee(Hero):
             self.position[1] -= self.move_speed
 
     def attack(self, enemy):
-        current_time = pygame.time.get_ticks()
-        if current_time - self.attack_time >= self.speed:
+        current_time = time.time()
+        if current_time - self.last_attack_time >= self.attack_cooldown:
             enemy.hp -= self.damage
-            self.attack_time = current_time
+            self.last_attack_time = current_time
+            print(f"Attacked {enemy.name} for {self.damage} damage. Enemy HP: {enemy.hp}")
 
     def cast_spell(self, enemy_champ):
         for enemy in enemy_champ:
@@ -54,7 +55,7 @@ class Melee(Hero):
             score += 1
             self.effects = []
             self.hp = 100
-            self.position = self.startpos
+            self.position = self.startpos.copy()
             return
         #stunned
         if "stun" in self.effects:
@@ -79,7 +80,11 @@ class Melee(Hero):
             self.spell_time = time.time()
         #attack or move
         nearest_enemy = min(enemy_champ, key=lambda enemy: self.distance(enemy.position))
+
         if self.distance(nearest_enemy.position) > self.range:
             self.move(nearest_enemy.position)
         else:
             self.attack(nearest_enemy)
+
+
+    clock.tick(60)

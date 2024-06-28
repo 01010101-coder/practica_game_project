@@ -68,7 +68,7 @@ class GameView:
 
         # Отрисовка героев на арене
         for hero in self.model.heroes['team_1']:
-            pygame.draw.circle(screen, (255, 0, 0), hero.position, 20)
+            pygame.draw.circle(screen, (hero.hp * 2, 0, 0), hero.position, 20)
         for hero in self.model.heroes['team_2']:
-            pygame.draw.circle(screen, (0, 0, 255), hero.position, 20)
+            pygame.draw.circle(screen, (0, 0, hero.hp * 2), hero.position, 20)
         pygame.display.flip()
