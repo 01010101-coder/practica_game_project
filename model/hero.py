@@ -17,13 +17,14 @@ class Hero:
         self.poisontime
         self.poisoncount
 
-    def attack(self):
+    def attack(self, enemy):
         pass
+
     def cast_spell(self):
        pass
 
     def distance(self, enemy_pos):
         return ((self.position[0] - enemy_pos[0]) ** 2 + (self.position[1] - enemy_pos[1]) ** 2) ** 0.5
 
-    def logic(self, ally_champ, enemy_champ, score):
+    def logic(self, ally_champ, enemy_champ):
         pass

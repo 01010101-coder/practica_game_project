@@ -2,12 +2,13 @@ import time
 import pygame
 from model.hero import Hero
 
-clock = pygame.time.Clock()
 class Assassin(Hero):
     def __init__(self, x, y):
         self.name = type
         self.hp = 70
-        self.damage = 6
+        self.damage = 8
+        self.speed = 10  # in ticks
+        self.attack_time = 0
         self.range = 10
         self.move_speed = 1
         self.startpos = [x, y]
@@ -22,8 +23,6 @@ class Assassin(Hero):
         self.poisontime = 0
         self.poisoncount = 0
         self.spell = "dash"
-        self.attack_cooldown = 1.0  # Attack every 1 second
-        self.last_attack_time = time.time()
 
     def move(self, target_position):
         if self.position[0] < target_position[0]:
@@ -37,11 +36,10 @@ class Assassin(Hero):
             self.position[1] -= self.move_speed
 
     def attack(self, enemy):
-        current_time = time.time()
-        if current_time - self.last_attack_time >= self.attack_cooldown:
+        current_time = pygame.time.get_ticks()
+        if current_time - self.attack_time >= self.speed:
             enemy.hp -= self.damage
-            self.last_attack_time = current_time
-            print(f"Attacked {enemy.name} for {self.damage} damage. Enemy HP: {enemy.hp}")
+            self.attack_time = current_time
 
     def cast_spell(self, nearest_enemy, enemy_champ):
         second_closest = [100000, 100000]
@@ -49,20 +47,18 @@ class Assassin(Hero):
             if enemy != nearest_enemy:
                 if self.distance(enemy.position) < self.distance(second_closest):
                     second_closest = enemy.position
-        self.position = [second_closest[0] - 7, second_closest[1] - 7]
+        self.position = [second_closest[0] - 10, second_closest[1] - 10]
         print(self.position)
+        print("!!!!!!!!!Assasin.spell")
 
-
-
-    def logic(self, ally_champ, enemy_champ, score):
+    def logic(self, ally_champ, enemy_champ):
         if not enemy_champ:
             return
         # death
         if self.hp <= 0:
-            score += 1
             self.effects = []
             self.hp = 70
-            self.position = self.startpos.copy()
+            self.position = self.startpos
             return
             # stunned
         if "stun" in self.effects:
@@ -91,4 +87,3 @@ class Assassin(Hero):
             self.move(nearest_enemy.position)
         else:
             self.attack(nearest_enemy)
-    clock.tick(60)

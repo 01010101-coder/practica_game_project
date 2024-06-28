@@ -3,17 +3,20 @@ import pygame
 from model.hero import Hero
 class Ranger(Hero):
     def __init__(self, x, y):
-        self.name = type
-        self.hp = 50
-        self.damage = 8
+        self.hp = 60
+        self.damage = 7
         self.speed = 30 # in ticks
         self.attack_time = 0
-        self.range = 120
+        self.range = 80
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = self.startpos
         self.cooldown = 4
         self.spell_time = time.time()
+
+        self.attack_cooldown = 1.0  # Attack every 1 second
+        self.last_attack_time = time.time()
+
         # effects and variables
         self.effects = []
         self.stuntime = 0
@@ -22,6 +25,8 @@ class Ranger(Hero):
         self.poisoncount = 0
         self.spell = "poison"
 
+    def __name__(self):
+        return "Ranger"
 
     def move(self, target_position):
         if self.position[0] < target_position[0]:
@@ -35,22 +40,22 @@ class Ranger(Hero):
             self.position[1] -= self.move_speed
 
     def attack(self, enemy):
-        current_time = pygame.time.get_ticks()
-        if current_time - self.attack_time >= self.speed:
+        current_time = time.time()
+        if current_time - self.last_attack_time >= self.attack_cooldown:
             enemy.hp -= self.damage
-            self.attack_time = current_time
+            self.last_attack_time = current_time
+            print(f"Attacked {enemy.name} for {self.damage} damage. Enemy HP: {enemy.hp}")
 
     def cast_spell(self, enemy):
-        enemy.effects.add("poison")
+        enemy.effects.append("poison")
         enemy.poisoncount = 3
         enemy.poisontime = time.time()
 
-    def logic(self, ally_champ, enemy_champ, score):
+    def logic(self, ally_champ, enemy_champ):
         if not enemy_champ:
             return
         #death
         if self.hp <= 0:
-            score += 1
             self.effects = []
             self.hp = 100
             self.position = self.startpos
