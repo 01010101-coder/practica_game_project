@@ -67,8 +67,8 @@ class GameView:
         screen.blit(score_surface, score_rect)
 
         # Отрисовка героев на арене
-        heroes = self.model.heroes['team_1'] + self.model.heroes['team_2']
-        for hero in heroes:
+        for hero in self.model.heroes['team_1']:
             pygame.draw.circle(screen, (255, 0, 0), hero.position, 20)
-
+        for hero in self.model.heroes['team_2']:
+            pygame.draw.circle(screen, (0, 0, 255), hero.position, 20)
         pygame.display.flip()
