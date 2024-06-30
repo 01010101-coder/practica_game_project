@@ -10,6 +10,6 @@ class GameModel:
 
     def update(self):
         for hero in self.heroes['team_1']:
-            hero.logic(self.heroes['team_1'], self.heroes['team_2'])
+            hero.logic(self, self.heroes['team_1'], self.heroes['team_2'])
         for hero in self.heroes['team_2']:
-            hero.logic(self.heroes['team_2'], self.heroes['team_1'])
+            hero.logic(self, self.heroes['team_2'], self.heroes['team_1'])

@@ -4,18 +4,19 @@ from model.hero import Hero
 
 class Mage(Hero):
     def __init__(self, x, y):
+        self.max_hp = 70
         self.hp = 70
         self.damage = 5
         self.speed = 50 # in ticks
         self.attack_time = 0
-        self.range = 100
+        self.range = 55
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
         self.cooldown = 6
         self.spell_time = time.time()
 
-        self.attack_cooldown = 1.0  # Attack every 1 second
+        self.attack_cooldown = 1.5  # Attack every 1 second
         self.last_attack_time = time.time()
 
         # effects and variables
@@ -29,37 +30,21 @@ class Mage(Hero):
     def __name__(self):
         return "Mage"
 
-    def move(self, target_position):
-        if self.position[0] < target_position[0]:
-            self.position[0] += self.move_speed
-        elif self.position[0] > target_position[0]:
-            self.position[0] -= self.move_speed
-
-        if self.position[1] < target_position[1]:
-            self.position[1] += self.move_speed
-        elif self.position[1] > target_position[1]:
-            self.position[1] -= self.move_speed
-
-    def attack(self, enemy):
-        current_time = time.time()
-        if current_time - self.last_attack_time >= self.attack_cooldown:
-            enemy.hp -= self.damage
-            self.last_attack_time = current_time
-            print(f"Attacked {enemy.name} for {self.damage} damage. Enemy HP: {enemy.hp}")
-
     def cast_spell(self, enemy):
         enemy.effects.append("stun")
         enemy.poisoncount = 2
         enemy.poisontime = time.time()
 
-    def logic(self, ally_champ, enemy_champ):
+    def logic(self, model, ally_champ, enemy_champ):
         if not enemy_champ:
             return
+
         # death
         if self.hp <= 0:
+            model.scores[0] += 1
             self.effects = []
             self.hp = 100
-            self.position = self.startpos
+            self.position = self.startpos.copy()
             return
             # stunned
         if "stun" in self.effects:
@@ -86,9 +71,5 @@ class Mage(Hero):
         # attack or move
         if self.distance(nearest_enemy.position) > self.range:
             self.move(nearest_enemy.position)
-        elif self.distance(nearest_enemy.position) < self.range:
-            reverse_enemy = [nearest_enemy.position[0] * -1, nearest_enemy.position[1] * -1]
-            self.move(reverse_enemy)
-            self.attack(nearest_enemy)
         else:
             self.attack(nearest_enemy)

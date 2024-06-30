@@ -1,8 +1,11 @@
 import time
 import pygame
 from model.hero import Hero
+
+
 class Ranger(Hero):
     def __init__(self, x, y):
+        self.max_hp = 60
         self.hp = 60
         self.damage = 7
         self.speed = 30 # in ticks
@@ -44,21 +47,22 @@ class Ranger(Hero):
         if current_time - self.last_attack_time >= self.attack_cooldown:
             enemy.hp -= self.damage
             self.last_attack_time = current_time
-            print(f"Attacked {enemy.name} for {self.damage} damage. Enemy HP: {enemy.hp}")
+            print(f"Attacked {enemy.__name__} for {self.damage} damage. Enemy HP: {enemy.hp}")
 
     def cast_spell(self, enemy):
         enemy.effects.append("poison")
         enemy.poisoncount = 3
         enemy.poisontime = time.time()
 
-    def logic(self, ally_champ, enemy_champ):
+    def logic(self, model, ally_champ, enemy_champ):
         if not enemy_champ:
             return
         #death
         if self.hp <= 0:
+            model.scores[1] += 1
             self.effects = []
             self.hp = 100
-            self.position = self.startpos
+            self.position = self.startpos.copy()
             return
         #stunned
         if "stun" in self.effects:
@@ -87,9 +91,9 @@ class Ranger(Hero):
         #attack or move
         if self.distance(nearest_enemy.position) > self.range:
             self.move(nearest_enemy.position)
-        elif self.distance(nearest_enemy.position) < self.range:
-            reverse_enemy = [nearest_enemy.position[0] * -1, nearest_enemy.position[1] * -1]
-            self.move(reverse_enemy)
-            self.attack(nearest_enemy)
+        # elif self.distance(nearest_enemy.position) < self.range:
+        #     reverse_enemy = [nearest_enemy.position[0] * -1, nearest_enemy.position[1] * -1]
+        #     self.move(reverse_enemy)
+        #     self.attack(nearest_enemy)
         else:
             self.attack(nearest_enemy)

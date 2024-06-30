@@ -4,17 +4,20 @@ from model.hero import Hero
 
 class Assassin(Hero):
     def __init__(self, x, y):
-        self.name = type
+        self.max_hp = 70
         self.hp = 70
         self.damage = 8
         self.speed = 10  # in ticks
         self.attack_time = 0
-        self.range = 10
+        self.range = 15
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
-        self.cooldown = 2
+        self.cooldown = 5
         self.spell_time = time.time()
+
+        self.attack_cooldown = 1.0  # Attack every 1 second
+        self.last_attack_time = time.time()
 
         # effects and variables
         self.effects = []
@@ -24,22 +27,8 @@ class Assassin(Hero):
         self.poisoncount = 0
         self.spell = "dash"
 
-    def move(self, target_position):
-        if self.position[0] < target_position[0]:
-            self.position[0] += self.move_speed
-        elif self.position[0] > target_position[0]:
-            self.position[0] -= self.move_speed
-
-        if self.position[1] < target_position[1]:
-            self.position[1] += self.move_speed
-        elif self.position[1] > target_position[1]:
-            self.position[1] -= self.move_speed
-
-    def attack(self, enemy):
-        current_time = pygame.time.get_ticks()
-        if current_time - self.attack_time >= self.speed:
-            enemy.hp -= self.damage
-            self.attack_time = current_time
+    def __name__(self):
+        return "Assasin"
 
     def cast_spell(self, nearest_enemy, enemy_champ):
         second_closest = [100000, 100000]
@@ -51,14 +40,15 @@ class Assassin(Hero):
         print(self.position)
         print("!!!!!!!!!Assasin.spell")
 
-    def logic(self, ally_champ, enemy_champ):
+    def logic(self, model, ally_champ, enemy_champ):
         if not enemy_champ:
             return
         # death
         if self.hp <= 0:
+            model.scores[1] += 1
             self.effects = []
             self.hp = 70
-            self.position = self.startpos
+            self.position = self.startpos.copy()
             return
             # stunned
         if "stun" in self.effects:
