@@ -4,7 +4,7 @@ from model.hero import Hero
 
 
 class Ranger(Hero):
-    def __init__(self, x, y):
+    def __init__(self, x, y, team):
         self.max_hp = 60
         self.hp = 60
         self.damage = 7
@@ -16,6 +16,8 @@ class Ranger(Hero):
         self.position = self.startpos
         self.cooldown = 4
         self.spell_time = time.time()
+
+        self.team = team
 
         self.attack_cooldown = 1.0  # Attack every 1 second
         self.last_attack_time = time.time()

@@ -3,7 +3,7 @@ import pygame
 from model.hero import Hero
 
 class Assassin(Hero):
-    def __init__(self, x, y):
+    def __init__(self, x, y, team):
         self.max_hp = 70
         self.hp = 70
         self.damage = 8
@@ -15,6 +15,8 @@ class Assassin(Hero):
         self.position = [x, y]
         self.cooldown = 5
         self.spell_time = time.time()
+
+        self.team = team
 
         self.attack_cooldown = 1.0  # Attack every 1 second
         self.last_attack_time = time.time()
@@ -70,6 +72,7 @@ class Assassin(Hero):
         # spellcast
         nearest_enemy = min(enemy_champ, key=lambda enemy: self.distance(enemy.position))
         if time.time() - self.spell_time >= self.cooldown:
+            print("A")
             self.cast_spell(nearest_enemy, enemy_champ)
             self.spell_time = time.time()
         # attack or move

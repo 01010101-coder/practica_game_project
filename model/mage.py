@@ -3,7 +3,7 @@ import pygame
 from model.hero import Hero
 
 class Mage(Hero):
-    def __init__(self, x, y):
+    def __init__(self, x, y, team):
         self.max_hp = 70
         self.hp = 70
         self.damage = 5
@@ -13,8 +13,10 @@ class Mage(Hero):
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
-        self.cooldown = 6
+        self.cooldown = 5
         self.spell_time = time.time()
+
+        self.team = team
 
         self.attack_cooldown = 1.5  # Attack every 1 second
         self.last_attack_time = time.time()
@@ -32,8 +34,8 @@ class Mage(Hero):
 
     def cast_spell(self, enemy):
         enemy.effects.append("stun")
-        enemy.poisoncount = 2
-        enemy.poisontime = time.time()
+        enemy.stuncount = 2
+        enemy.stuntime = time.time()
 
     def logic(self, model, ally_champ, enemy_champ):
         if not enemy_champ:

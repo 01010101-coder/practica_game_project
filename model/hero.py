@@ -1,7 +1,7 @@
 import time
 
 class Hero:
-    def __init__(self, x, y):
+    def __init__(self, x, y, team):
         pass
 
     def move(self, target_position):

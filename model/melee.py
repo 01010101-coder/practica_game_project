@@ -4,7 +4,7 @@ from model.hero import Hero
 
 clock = pygame.time.Clock()
 class Melee(Hero):
-    def __init__(self, x, y):
+    def __init__(self, x, y, team):
         self.max_hp = 120
         self.hp = 120
         self.damage = 10
@@ -16,6 +16,8 @@ class Melee(Hero):
         self.position = [x, y]
         self.cooldown = 4
         self.spell_time = time.time()
+
+        self.team = team
 
         self.attack_cooldown = 1.0  # Attack every 1 second
         self.last_attack_time = time.time()
@@ -48,6 +50,7 @@ class Melee(Hero):
             return
         #stunned
         if "stun" in self.effects:
+            print(self.stuncount, time.time(), self.stuntime)
             if self.stuncount <= 0:
                 self.effects.remove("stun")
             else:
