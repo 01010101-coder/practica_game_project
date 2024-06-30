@@ -1,11 +1,15 @@
 import pygame
-from model.game_model import GameModel
 import sys
+from model.game_model import GameModel
+from view.pick_menu import PickMenuState
+from view.gameover_view import GameOverState
 
 class GameplayState:
-    def __init__(self, controller, window_width, window_height, team_1, team_2, game_mode):
+    def __init__(self, controller, window_width, window_height, team_1, team_2, game_mode, match_scores=None):
         self.controller = controller
         self.model = GameModel(team_1, team_2, game_mode)
+        if match_scores:
+            self.model.match_scores = match_scores
         self.view = GameView(self.model, window_width, window_height)
 
     def handle_event(self, event):
@@ -14,7 +18,12 @@ class GameplayState:
             sys.exit()
 
     def update(self):
-        self.model.update()
+        match_over = self.model.update()
+        if match_over:
+            if self.model.is_series_over():
+                self.controller.set_state(GameOverState(self.controller, self.model.match_scores, self.view.window_width, self.view.window_height))
+            else:
+                self.controller.set_state(PickMenuState(self.controller, self.view.window_width, self.view.window_height, self.model.game_mode, self.model.match_scores))
 
     def draw(self, screen):
         self.view.draw(screen)
@@ -44,6 +53,21 @@ class GameView:
     def draw(self, screen):
         screen.fill((200, 200, 200))  # Цвет фона
 
+        # Отрисовка зоны для общего счета матча сверху
+        pygame.draw.rect(screen, (100, 100, 100), (0, 0, self.window_width, self.score_height))
+
+        # Отрисовка счета матчей
+        match_score_text = f"Matches - Team 1: {self.model.match_scores[0]}  -  Team 2: {self.model.match_scores[1]}"
+        match_score_surface = self.font.render(match_score_text, True, (255, 255, 255))
+        match_score_rect = match_score_surface.get_rect(center=(self.window_width // 2, self.score_height // 3))
+        screen.blit(match_score_surface, match_score_rect)
+
+        # Отрисовка счета матча
+        score_text = f"Team 1: {self.model.scores[0]}  -  Team 2: {self.model.scores[1]}"
+        score_surface = self.font.render(score_text, True, (255, 255, 255))
+        score_rect = score_surface.get_rect(center=(self.window_width // 2, self.score_height // 1.5))
+        screen.blit(score_surface, score_rect)
+
         # Отрисовка арены
         arena_x = self.icon_width
         arena_y = self.score_height
@@ -53,43 +77,23 @@ class GameView:
         pygame.draw.rect(screen, (150, 150, 150), (0, self.score_height, self.icon_width, self.arena_height))
 
         # Отрисовка зоны для иконок персонажей справа
-        pygame.draw.rect(screen, (150, 150, 150),
-                         (self.icon_width + self.arena_width, self.score_height, self.icon_width, self.arena_height))
+        pygame.draw.rect(screen, (150, 150, 150), (self.icon_width + self.arena_width, self.score_height, self.icon_width, self.arena_height))
 
-        # Отрисовка зоны для общего счета матча сверху
-        pygame.draw.rect(screen, (100, 100, 100), (0, 0, self.window_width, self.score_height))
-
-        # Отрисовка счета матча
-        score_text = f"Team 1: {self.model.scores[0]}  -  Team 2: {self.model.scores[1]}"
-        score_surface = self.font.render(score_text, True, (255, 255, 255))
-        score_rect = score_surface.get_rect(center=(self.window_width // 2, self.score_height // 2))
-        screen.blit(score_surface, score_rect)
-
-        # Отрисовка героев на арене и полосок здоровья
+        # Отрисовка героев на арене и их полосок HP
         for hero in self.model.heroes['team_1']:
-            self.draw_hero(screen, hero, (255, abs(hero.hp), 0))
-
+            pygame.draw.circle(screen, (255, abs(hero.hp), 0), hero.position, 20)
+            self.draw_health_bar(screen, hero)
         for hero in self.model.heroes['team_2']:
-            self.draw_hero(screen, hero, (0, abs(hero.hp), 255))
+            pygame.draw.circle(screen, (0, abs(hero.hp), 255), hero.position, 20)
+            self.draw_health_bar(screen, hero)
 
         pygame.display.flip()
-
-    def draw_hero(self, screen, hero, color):
-        # Отрисовка героя
-        pygame.draw.circle(screen, color, hero.position, 20)
-        # Отрисовка полоски здоровья
-        self.draw_health_bar(screen, hero)
 
     def draw_health_bar(self, screen, hero):
         bar_width = 40
         bar_height = 5
-        # Определение длины полоски здоровья в зависимости от текущего здоровья
-        health_ratio = hero.hp / hero.max_hp  # Предполагая, что максимальное здоровье героя 100
-        current_bar_width = int(bar_width * health_ratio)
-        # Определение позиции полоски здоровья
         bar_x = hero.position[0] - bar_width // 2
-        bar_y = hero.position[1] - 30  # Над героем
-        # Отрисовка фона полоски здоровья (серый цвет)
-        pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
-        # Отрисовка текущего состояния здоровья (зелёный цвет)
-        pygame.draw.rect(screen, (0, 255, 0), (bar_x, bar_y, current_bar_width, bar_height))
+        bar_y = hero.position[1] - 30  # Расположение полоски HP над героем
+        health_ratio = hero.hp / hero.max_hp
+        pygame.draw.rect(screen, (255, 0, 0), (bar_x, bar_y, bar_width, bar_height))  # Фон полоски (красный)
+        pygame.draw.rect(screen, (0, 255, 0), (bar_x, bar_y, int(bar_width * health_ratio), bar_height))  # Полоска здоровья (зеленый)

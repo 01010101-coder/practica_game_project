@@ -7,9 +7,9 @@ class Mage(Hero):
         self.max_hp = 70
         self.hp = 70
         self.damage = 5
-        self.speed = 50 # in ticks
+        self.speed = 50
         self.attack_time = 0
-        self.range = 55
+        self.range = 75
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]

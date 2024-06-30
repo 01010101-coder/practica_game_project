@@ -8,8 +8,8 @@ from model.melee import Melee
 from model.ranger import Ranger
 
 class PickMenuState:
-    def __init__(self, controller, window_width, window_height, mode):
-        self.game_mode = mode
+    def __init__(self, controller, window_width, window_height, game_mode, match_scores=None):
+        self.game_mode = game_mode
 
         self.controller = controller
         self.window_width = window_width
@@ -24,6 +24,7 @@ class PickMenuState:
         self.selected_heroes_team1 = []
         self.selected_heroes_team2 = []
         self.current_team = 1
+        self.match_scores = match_scores if match_scores else [0, 0]
 
         # Создание кнопок для героев
         self.hero_buttons = [Button(hero.__name__, (100 + i * 150, 100), 30, "navy", hero) for i, hero in enumerate(self.available_heroes)]
@@ -59,7 +60,7 @@ class PickMenuState:
     def finish_picking(self):
         if len(self.selected_heroes_team1) == 2 and len(self.selected_heroes_team2) == 2:
             from view.gameplay_view import GameplayState
-            self.controller.set_state(GameplayState(self.controller, self.window_width, self.window_height, self.selected_heroes_team1, self.selected_heroes_team2, self.game_mode))
+            self.controller.set_state(GameplayState(self.controller, self.window_width, self.window_height, self.selected_heroes_team1, self.selected_heroes_team2, self.game_mode, self.match_scores))
 
     def update(self):
         pass

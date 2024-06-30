@@ -46,6 +46,7 @@ class Melee(Hero):
             if self.team == 1:
                 model.scores[0] += 1
             else:
+                print("a")
                 model.scores[1] += 1
 
             self.effects = []
