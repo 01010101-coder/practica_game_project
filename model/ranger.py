@@ -13,7 +13,7 @@ class Ranger(Hero):
         self.range = 80
         self.move_speed = 1
         self.startpos = [x, y]
-        self.position = self.startpos
+        self.position = [x, y]
         self.cooldown = 4
         self.spell_time = time.time()
 
@@ -61,9 +61,12 @@ class Ranger(Hero):
             return
         #death
         if self.hp <= 0:
-            model.scores[1] += 1
+            if self.team == 1:
+                model.scores[0] += 1
+            else:
+                model.scores[1] += 1
             self.effects = []
-            self.hp = 100
+            self.hp = self.max_hp
             self.position = self.startpos.copy()
             return
         #stunned

@@ -7,7 +7,6 @@ from model.mage import Mage
 from model.melee import Melee
 from model.ranger import Ranger
 
-
 class PickMenuState:
     def __init__(self, controller, window_width, window_height, mode):
         self.game_mode = mode
@@ -21,7 +20,7 @@ class PickMenuState:
         self.background_image = pygame.transform.scale(self.background_image, (self.window_width, self.window_height))
 
         # Доступные герои
-        self.available_heroes = [Assassin, Mage, Melee, Ranger]  # Добавьте остальные классы героев
+        self.available_heroes = [Assassin, Mage, Melee, Ranger]
         self.selected_heroes_team1 = []
         self.selected_heroes_team2 = []
         self.current_team = 1
@@ -52,6 +51,11 @@ class PickMenuState:
             self.selected_heroes_team2.append(hero_class)
             self.current_team = 1
 
+        # Disable the button for the picked hero
+        for button in self.hero_buttons:
+            if button.feedback == hero_class:
+                button.disable()
+
     def finish_picking(self):
         if len(self.selected_heroes_team1) == 2 and len(self.selected_heroes_team2) == 2:
             from view.gameplay_view import GameplayState
@@ -65,6 +69,7 @@ class PickMenuState:
 
         # Отрисовка кнопок героев
         for button in self.hero_buttons:
+            button.check_hover()
             button.show(screen)
 
         # Отрисовка кнопки завершения выбора

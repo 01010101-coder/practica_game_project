@@ -39,17 +39,18 @@ class Assassin(Hero):
                 if self.distance(enemy.position) < self.distance(second_closest):
                     second_closest = enemy.position
         self.position = [second_closest[0] - 10, second_closest[1] - 10]
-        print(self.position)
-        print("!!!!!!!!!Assasin.spell")
 
     def logic(self, model, ally_champ, enemy_champ):
         if not enemy_champ:
             return
         # death
         if self.hp <= 0:
-            model.scores[1] += 1
+            if self.team == 1:
+                model.scores[0] += 1
+            else:
+                model.scores[1] += 1
             self.effects = []
-            self.hp = 70
+            self.hp = self.max_hp
             self.position = self.startpos.copy()
             return
             # stunned
@@ -72,7 +73,6 @@ class Assassin(Hero):
         # spellcast
         nearest_enemy = min(enemy_champ, key=lambda enemy: self.distance(enemy.position))
         if time.time() - self.spell_time >= self.cooldown:
-            print("A")
             self.cast_spell(nearest_enemy, enemy_champ)
             self.spell_time = time.time()
         # attack or move

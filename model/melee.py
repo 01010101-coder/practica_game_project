@@ -19,7 +19,7 @@ class Melee(Hero):
 
         self.team = team
 
-        self.attack_cooldown = 1.0  # Attack every 1 second
+        self.attack_cooldown = 0.7  # Attack every 1 second
         self.last_attack_time = time.time()
 
         #effects and variables
@@ -41,16 +41,20 @@ class Melee(Hero):
     def logic(self, model, ally_champ, enemy_champ):
         if not enemy_champ:
             return
-        #death
+
         if self.hp <= 0:
-            model.scores[0] += 1
+            if self.team == 1:
+                model.scores[0] += 1
+            else:
+                model.scores[1] += 1
+
             self.effects = []
-            self.hp = 100
+            self.hp = self.max_hp
             self.position = self.startpos.copy()
             return
+
         #stunned
         if "stun" in self.effects:
-            print(self.stuncount, time.time(), self.stuntime)
             if self.stuncount <= 0:
                 self.effects.remove("stun")
             else:

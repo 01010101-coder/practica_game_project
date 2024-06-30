@@ -84,7 +84,7 @@ class GameView:
         bar_width = 40
         bar_height = 5
         # Определение длины полоски здоровья в зависимости от текущего здоровья
-        health_ratio = hero.hp / 100  # Предполагая, что максимальное здоровье героя 100
+        health_ratio = hero.hp / hero.max_hp  # Предполагая, что максимальное здоровье героя 100
         current_bar_width = int(bar_width * health_ratio)
         # Определение позиции полоски здоровья
         bar_x = hero.position[0] - bar_width // 2

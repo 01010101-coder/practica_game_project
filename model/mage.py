@@ -34,7 +34,7 @@ class Mage(Hero):
 
     def cast_spell(self, enemy):
         enemy.effects.append("stun")
-        enemy.stuncount = 2
+        enemy.stuncount = 1.5
         enemy.stuntime = time.time()
 
     def logic(self, model, ally_champ, enemy_champ):
@@ -43,9 +43,12 @@ class Mage(Hero):
 
         # death
         if self.hp <= 0:
-            model.scores[0] += 1
+            if self.team == 1:
+                model.scores[0] += 1
+            else:
+                model.scores[1] += 1
             self.effects = []
-            self.hp = 100
+            self.hp = self.max_hp
             self.position = self.startpos.copy()
             return
             # stunned
