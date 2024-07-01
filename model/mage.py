@@ -29,6 +29,9 @@ class Mage(Hero):
         self.poisoncount = 0
         self.spell = "stun"
 
+        self.kills = 0
+        self.deaths = 0
+
     def __name__(self):
         return "Mage"
 
@@ -50,6 +53,7 @@ class Mage(Hero):
             self.effects = []
             self.hp = self.max_hp
             self.position = self.startpos.copy()
+            self.deaths += 1
             return
             # stunned
         if "stun" in self.effects:

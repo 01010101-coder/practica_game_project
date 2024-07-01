@@ -2,7 +2,7 @@ class GameModel:
     def __init__(self, team_1, team_2, game_mode):
         self.heroes = {
             'team_1': [hero_class(300, 300 + i * 100, 0) for i, hero_class in enumerate(team_1)],
-            'team_2': [hero_class(700, 300 + i * 100, 1) for i, hero_class in enumerate(team_2)]
+            'team_2': [hero_class(900, 300 + i * 100, 1) for i, hero_class in enumerate(team_2)]
         }
 
         self.game_mode = game_mode

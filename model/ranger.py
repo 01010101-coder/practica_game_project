@@ -7,7 +7,7 @@ class Ranger(Hero):
     def __init__(self, x, y, team):
         self.max_hp = 60
         self.hp = 60
-        self.damage = 20
+        self.damage = 50
         self.speed = 30 # in ticks
         self.attack_time = 0
         self.range = 95
@@ -30,6 +30,9 @@ class Ranger(Hero):
         self.poisoncount = 0
         self.spell = "poison"
 
+        self.kills = 0
+        self.deaths = 0
+
     def __name__(self):
         return "Ranger"
 
@@ -43,13 +46,6 @@ class Ranger(Hero):
             self.position[1] += self.move_speed
         elif self.position[1] > target_position[1]:
             self.position[1] -= self.move_speed
-
-    def attack(self, enemy):
-        current_time = time.time()
-        if current_time - self.last_attack_time >= self.attack_cooldown:
-            enemy.hp -= self.damage
-            self.last_attack_time = current_time
-            print(f"Attacked {enemy.__name__} for {self.damage} damage. Enemy HP: {enemy.hp}")
 
     def cast_spell(self, enemy):
         enemy.effects.append("poison")
@@ -68,6 +64,7 @@ class Ranger(Hero):
             self.effects = []
             self.hp = self.max_hp
             self.position = self.startpos.copy()
+            self.deaths += 1
             return
         #stunned
         if "stun" in self.effects:

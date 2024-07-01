@@ -30,6 +30,9 @@ class Melee(Hero):
         self.poisoncount = 0
         self.spell = "splash"
 
+        self.kills = 0
+        self.deaths = 0
+
     def __name__(self):
         return "Melee"
 
@@ -52,6 +55,7 @@ class Melee(Hero):
             self.effects = []
             self.hp = self.max_hp
             self.position = self.startpos.copy()
+            self.deaths += 1
             return
 
         #stunned

@@ -49,6 +49,7 @@ class GameView:
 
         # Инициализация шрифта
         self.font = pygame.font.SysFont("Arial", 36)
+        self.small_font = pygame.font.SysFont("Arial", 18)  # Уменьшенный шрифт
 
     def draw(self, screen):
         screen.fill((200, 200, 200))  # Цвет фона
@@ -87,6 +88,10 @@ class GameView:
             pygame.draw.circle(screen, (0, abs(hero.hp), 255), hero.position, 20)
             self.draw_health_bar(screen, hero)
 
+        # Отрисовка героев и статистики по бокам
+        self.draw_hero_stats(screen, self.model.heroes['team_1'], 0, self.score_height)
+        self.draw_hero_stats(screen, self.model.heroes['team_2'], self.icon_width + self.arena_width, self.score_height)
+
         pygame.display.flip()
 
     def draw_health_bar(self, screen, hero):
@@ -97,3 +102,12 @@ class GameView:
         health_ratio = hero.hp / hero.max_hp
         pygame.draw.rect(screen, (255, 0, 0), (bar_x, bar_y, bar_width, bar_height))  # Фон полоски (красный)
         pygame.draw.rect(screen, (0, 255, 0), (bar_x, bar_y, int(bar_width * health_ratio), bar_height))  # Полоска здоровья (зеленый)
+
+    def draw_hero_stats(self, screen, heroes, start_x, start_y):
+        for i, hero in enumerate(heroes):
+            name_text = type(hero).__name__
+            stats_text = f"Kills: {hero.kills}, Deaths: {hero.deaths}"
+            name_surface = self.small_font.render(name_text, True, (255, 255, 255))
+            stats_surface = self.small_font.render(stats_text, True, (255, 255, 255))
+            screen.blit(name_surface, (start_x + 5, start_y + i * 60))  # Немного отступаем от края
+            screen.blit(stats_surface, (start_x + 5, start_y + i * 60 + 20))  # Немного отступаем от края и делаем перенос строки

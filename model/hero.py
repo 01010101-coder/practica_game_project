@@ -21,7 +21,8 @@ class Hero:
         if current_time - self.last_attack_time >= self.attack_cooldown:
             enemy.hp -= self.damage
             self.last_attack_time = current_time
-            print(f"Attacked {enemy.__name__} for {self.damage} damage. Enemy HP: {enemy.hp}")
+            if enemy.hp <= 0:
+                self.kills += 1
 
     def distance(self, enemy_pos):
         return ((self.position[0] - enemy_pos[0]) ** 2 + (self.position[1] - enemy_pos[1]) ** 2) ** 0.5

@@ -2,23 +2,24 @@ import time
 import pygame
 from model.hero import Hero
 
-class Assassin(Hero):
+class Healer(Hero):
     def __init__(self, x, y, team):
         self.max_hp = 70
         self.hp = 70
-        self.damage = 8
-        self.speed = 10  # in ticks
+        self.heal_amount = 10
+        self.damage = 2
+        self.speed = 50
         self.attack_time = 0
-        self.range = 15
+        self.range = 75
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
-        self.cooldown = 5
+        self.cooldown = 3
         self.spell_time = time.time()
 
         self.team = team
 
-        self.attack_cooldown = 1.0  # Attack every 1 second
+        self.attack_cooldown = 1.5  # Attack every 1.5 seconds
         self.last_attack_time = time.time()
 
         # effects and variables
@@ -27,25 +28,23 @@ class Assassin(Hero):
         self.stuncount = 0
         self.poisontime = 0
         self.poisoncount = 0
-        self.spell = "dash"
+        self.spell = "heal"
 
         self.kills = 0
         self.deaths = 0
 
     def __name__(self):
-        return "Assasin"
+        return "Healer"
 
-    def cast_spell(self, nearest_enemy, enemy_champ):
-        second_closest = [100000, 100000]
-        for enemy in enemy_champ:
-            if enemy != nearest_enemy:
-                if self.distance(enemy.position) < self.distance(second_closest):
-                    second_closest = enemy.position
-        self.position = [second_closest[0] - 10, second_closest[1] - 10]
+    def cast_spell(self, ally_champ):
+        if ally_champ:
+            lowest_hp_ally = min(ally_champ, key=lambda ally: ally.hp)
+            lowest_hp_ally.hp = lowest_hp_ally.hp + self.heal_amount
 
     def logic(self, model, ally_champ, enemy_champ):
         if not enemy_champ:
             return
+
         # death
         if self.hp <= 0:
             if self.team == 1:
@@ -57,7 +56,7 @@ class Assassin(Hero):
             self.position = self.startpos.copy()
             self.deaths += 1
             return
-            # stunned
+        # stunned
         if "stun" in self.effects:
             if self.stuncount <= 0:
                 self.effects.remove("stun")
@@ -65,7 +64,7 @@ class Assassin(Hero):
                 self.stuncount -= time.time() - self.stuntime
                 self.stuntime = time.time()
                 return
-            # poisoned
+        # poisoned
         if "poison" in self.effects:
             if self.poisoncount <= 0:
                 self.effects.remove("poison")
@@ -75,11 +74,12 @@ class Assassin(Hero):
                 self.hp -= time.time() - self.poisontime
                 self.poisontime = time.time()
         # spellcast
-        nearest_enemy = min(enemy_champ, key=lambda enemy: self.distance(enemy.position))
         if time.time() - self.spell_time >= self.cooldown:
-            self.cast_spell(nearest_enemy, enemy_champ)
+            self.cast_spell(ally_champ)
             self.spell_time = time.time()
+
         # attack or move
+        nearest_enemy = min(enemy_champ, key=lambda enemy: self.distance(enemy.position))
         if self.distance(nearest_enemy.position) > self.range:
             self.move(nearest_enemy.position)
         else:
