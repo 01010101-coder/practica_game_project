@@ -72,10 +72,10 @@ class GameView:
 
         # Отрисовка героев на арене и их полосок HP
         for hero in self.model.heroes['team_1']:
-            pygame.draw.circle(screen, (255, abs(hero.hp), 0), hero.position, 20)
+            hero.draw(screen)
             self.draw_health_bar(screen, hero)
         for hero in self.model.heroes['team_2']:
-            pygame.draw.circle(screen, (0, abs(hero.hp), 255), hero.position, 20)
+            hero.draw(screen)
             self.draw_health_bar(screen, hero)
 
         # Отрисовка героев и статистики по бокам

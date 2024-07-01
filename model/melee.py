@@ -5,6 +5,8 @@ from model.hero import Hero
 clock = pygame.time.Clock()
 class Melee(Hero):
     def __init__(self, x, y, team):
+        super().__init__(x, y, team)
+        self.load_sprite('view/sprites/melee.png')
         self.max_hp = 120
         self.hp = 120
         self.damage = 10

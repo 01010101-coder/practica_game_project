@@ -4,6 +4,8 @@ from model.hero import Hero
 
 class Mage(Hero):
     def __init__(self, x, y, team):
+        super().__init__(x, y, team)
+        self.load_sprite('view/sprites/mage.png')
         self.max_hp = 70
         self.hp = 70
         self.damage = 5

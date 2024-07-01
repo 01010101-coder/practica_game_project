@@ -1,8 +1,18 @@
 import time
+import pygame
 
 class Hero:
     def __init__(self, x, y, team):
-        pass
+        self.position = [x, y]
+        self.sprite = None
+
+    def load_sprite(self, image_path):
+        self.sprite = pygame.image.load(image_path)
+        self.sprite = pygame.transform.scale(self.sprite, (60, 60))  # Скалирование спрайта до нужного размера
+
+    def draw(self, screen):
+        if self.sprite:
+            screen.blit(self.sprite, self.position)
 
     def move(self, target_position):
         if self.position[0] < target_position[0]:

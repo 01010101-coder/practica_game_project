@@ -5,6 +5,8 @@ from model.hero import Hero
 
 class Ranger(Hero):
     def __init__(self, x, y, team):
+        super().__init__(x, y, team)
+        self.load_sprite('view/sprites/range.png')
         self.max_hp = 60
         self.hp = 60
         self.damage = 10

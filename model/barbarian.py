@@ -4,6 +4,8 @@ from model.hero import Hero
 
 class Barbarian(Hero):
     def __init__(self, x, y, team):
+        super().__init__(x, y, team)
+        self.load_sprite('view/sprites/barbarian.png')
         self.max_hp = 100
         self.hp = 100
         self.damage = 8
