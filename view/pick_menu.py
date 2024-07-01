@@ -7,6 +7,7 @@ from model.mage import Mage
 from model.melee import Melee
 from model.ranger import Ranger
 from model.healer import Healer
+from model.barbarian import Barbarian
 
 class PickMenuState:
     def __init__(self, controller, window_width, window_height, game_mode, match_scores=None):
@@ -21,7 +22,7 @@ class PickMenuState:
         self.background_image = pygame.transform.scale(self.background_image, (self.window_width, self.window_height))
 
         # Доступные герои
-        self.available_heroes = [Assassin, Mage, Melee, Ranger, Healer]
+        self.available_heroes = [Assassin, Mage, Melee, Ranger, Healer, Barbarian]
         self.selected_heroes_team1 = []
         self.selected_heroes_team2 = []
         self.current_team = 1

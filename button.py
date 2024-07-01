@@ -1,14 +1,14 @@
 import pygame
 
 class Button:
-    def __init__(self, text, pos, font, bg="black", feedback=""):
+    def __init__(self, text, pos, font, bg=None, feedback=""):
         self.x, self.y = pos
         self.font = pygame.font.SysFont("Arial", font)
         self.change_text(text, bg, feedback)
         self.hover = False
-        self.enabled = True  # Добавляем флаг доступности кнопки
+        self.enabled = True
 
-    def change_text(self, text, bg="black", feedback=""):
+    def change_text(self, text, bg=None, feedback=""):
         self.text = text
         self.bg = bg
         self.feedback = feedback
@@ -17,16 +17,19 @@ class Button:
     def render_text(self):
         self.text_render = self.font.render(self.text, True, pygame.Color("white"))
         self.size = self.text_render.get_size()
-        self.surface = pygame.Surface(self.size)
+        self.surface = pygame.Surface(self.size, pygame.SRCALPHA)  # Использование прозрачного фона
         self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
-        self.surface.fill(self.bg)
+        if self.bg:
+            self.surface.fill(self.bg)
         self.surface.blit(self.text_render, (0, 0))
 
     def show(self, screen):
-        if self.hover and self.enabled:
-            self.surface.fill(pygame.Color("dodgerblue"))
+        if not self.enabled:
+            self.surface.fill((128, 128, 128, 128))  # Серый фон с прозрачностью
+        elif self.hover:
+            self.surface.fill((30, 144, 255, 128))  # DodgerBlue фон с прозрачностью
         else:
-            self.surface.fill(self.bg if self.enabled else pygame.Color("gray"))  # Изменение цвета, если кнопка недоступна
+            self.surface.fill((0, 0, 0, 0))  # Прозрачный фон
         self.surface.blit(self.text_render, (0, 0))
         screen.blit(self.surface, (self.x, self.y))
 
@@ -50,4 +53,4 @@ class Button:
 
     def disable(self):
         self.enabled = False
-        self.render_text()
+        self.change_text(self.text, "gray", self.feedback)

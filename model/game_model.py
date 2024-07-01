@@ -26,8 +26,8 @@ class GameModel:
             else:
                 self.match_scores[1] += 1
             self.reset_scores()
-            return True  # Match over
-        return False  # Match continues
+            return True
+        return False 
 
     def reset_scores(self):
         self.scores = [0, 0]

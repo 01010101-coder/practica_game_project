@@ -37,7 +37,7 @@ class Mage(Hero):
 
     def cast_spell(self, enemy):
         enemy.effects.append("stun")
-        enemy.stuncount = 1.5
+        enemy.stuncount = 1
         enemy.stuntime = time.time()
 
     def logic(self, model, ally_champ, enemy_champ):
@@ -76,7 +76,7 @@ class Mage(Hero):
         nearest_enemy = min(enemy_champ, key=lambda enemy: self.distance(enemy.position))
         if time.time() - self.spell_time >= self.cooldown:
             self.cast_spell(nearest_enemy)
-            self.stuntime = time.time()
+            self.spell_time = time.time()
         # attack or move
         if self.distance(nearest_enemy.position) > self.range:
             self.move(nearest_enemy.position)

@@ -7,7 +7,7 @@ class Ranger(Hero):
     def __init__(self, x, y, team):
         self.max_hp = 60
         self.hp = 60
-        self.damage = 50
+        self.damage = 10
         self.speed = 30 # in ticks
         self.attack_time = 0
         self.range = 95
@@ -19,7 +19,7 @@ class Ranger(Hero):
 
         self.team = team
 
-        self.attack_cooldown = 0.5  # Attack every 1 second
+        self.attack_cooldown = 0.7  # Attack every 1 second
         self.last_attack_time = time.time()
 
         # effects and variables

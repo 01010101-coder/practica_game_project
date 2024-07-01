@@ -51,11 +51,12 @@ class GameView:
         self.font = pygame.font.SysFont("Arial", 36)
         self.small_font = pygame.font.SysFont("Arial", 18)  # Уменьшенный шрифт
 
-    def draw(self, screen):
-        screen.fill((200, 200, 200))  # Цвет фона
+        # Загрузка фонового изображения
+        self.background_image = pygame.image.load("view/arena.png")
+        self.background_image = pygame.transform.scale(self.background_image, (self.window_width, self.window_height))
 
-        # Отрисовка зоны для общего счета матча сверху
-        pygame.draw.rect(screen, (100, 100, 100), (0, 0, self.window_width, self.score_height))
+    def draw(self, screen):
+        screen.blit(self.background_image, (0, 0))  # Отображение фонового изображения
 
         # Отрисовка счета матчей
         match_score_text = f"Matches - Team 1: {self.model.match_scores[0]}  -  Team 2: {self.model.match_scores[1]}"
@@ -69,17 +70,6 @@ class GameView:
         score_rect = score_surface.get_rect(center=(self.window_width // 2, self.score_height // 1.5))
         screen.blit(score_surface, score_rect)
 
-        # Отрисовка арены
-        arena_x = self.icon_width
-        arena_y = self.score_height
-        pygame.draw.rect(screen, (255, 255, 255), (arena_x, arena_y, self.arena_width, self.arena_height))
-
-        # Отрисовка зоны для иконок персонажей слева
-        pygame.draw.rect(screen, (150, 150, 150), (0, self.score_height, self.icon_width, self.arena_height))
-
-        # Отрисовка зоны для иконок персонажей справа
-        pygame.draw.rect(screen, (150, 150, 150), (self.icon_width + self.arena_width, self.score_height, self.icon_width, self.arena_height))
-
         # Отрисовка героев на арене и их полосок HP
         for hero in self.model.heroes['team_1']:
             pygame.draw.circle(screen, (255, abs(hero.hp), 0), hero.position, 20)
@@ -90,7 +80,7 @@ class GameView:
 
         # Отрисовка героев и статистики по бокам
         self.draw_hero_stats(screen, self.model.heroes['team_1'], 0, self.score_height)
-        self.draw_hero_stats(screen, self.model.heroes['team_2'], self.icon_width + self.arena_width, self.score_height)
+        self.draw_hero_stats(screen, self.model.heroes['team_2'], self.window_width - self.icon_width, self.score_height)
 
         pygame.display.flip()
 
