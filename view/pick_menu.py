@@ -30,7 +30,8 @@ class PickMenuState:
         self.match_scores = match_scores if match_scores else [0, 0]
 
         # Создание кнопок для героев
-        self.hero_buttons = [Button(hero.__name__, (100 + i * 150, 100), 30, "navy", hero) for i, hero in enumerate(self.available_heroes)]
+        self.hero_buttons = [Button(hero.__name__, (100 + i * 150, 100), 30, "navy", hero) for i, hero in
+                             enumerate(self.available_heroes)]
 
         # Кнопка для завершения выбора
         self.finish_button = Button("Finish", (self.window_width // 2, self.window_height - 100), 50, "green", "finish")
@@ -63,7 +64,9 @@ class PickMenuState:
     def finish_picking(self):
         if len(self.selected_heroes_team1) == 2 and len(self.selected_heroes_team2) == 2:
             from view.gameplay_view import GameplayState
-            self.controller.set_state(GameplayState(self.controller, self.window_width, self.window_height, self.selected_heroes_team1, self.selected_heroes_team2, self.game_mode, self.match_scores))
+            self.controller.set_state(
+                GameplayState(self.controller, self.window_width, self.window_height, self.selected_heroes_team1,
+                              self.selected_heroes_team2, self.game_mode, self.match_scores))
 
     def update(self):
         pass
@@ -81,9 +84,17 @@ class PickMenuState:
 
         # Отрисовка выбранных героев
         font = pygame.font.SysFont("Arial", 24)
-        team1_text = font.render(f"Team 1: {[hero.__name__ for hero in self.selected_heroes_team1]}", True, pygame.Color("white"))
-        team2_text = font.render(f"Team 2: {[hero.__name__ for hero in self.selected_heroes_team2]}", True, pygame.Color("white"))
-        screen.blit(team1_text, (50, self.window_height - 200))
-        screen.blit(team2_text, (self.window_width - 300, self.window_height - 200))
+
+        team1_label = font.render("Team 1:", True, pygame.Color("white"))
+        screen.blit(team1_label, (50, self.window_height - 250))
+        for i, hero in enumerate(self.selected_heroes_team1):
+            hero_text = font.render(hero.__name__, True, pygame.Color("white"))
+            screen.blit(hero_text, (50, self.window_height - 220 + i * 30))
+
+        team2_label = font.render("Team 2:", True, pygame.Color("white"))
+        screen.blit(team2_label, (self.window_width - 200, self.window_height - 250))
+        for i, hero in enumerate(self.selected_heroes_team2):
+            hero_text = font.render(hero.__name__, True, pygame.Color("white"))
+            screen.blit(hero_text, (self.window_width - 200, self.window_height - 220 + i * 30))
 
         pygame.display.flip()

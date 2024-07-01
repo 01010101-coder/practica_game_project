@@ -1,22 +1,26 @@
 import pygame
+import sys
 from controller.game_controller import GameController
 from view.main_menu_view import MainMenuState
-from view.gameplay_view import GameplayState
-from view.pick_menu import PickMenuState
 
 def main():
     pygame.init()
-    pygame.font.init()  # Инициализация модуля шрифтов Pygame
+    pygame.mixer.init()  # Инициализация микшера Pygame
 
-    # Настройки размеров окна
-    window_width = 1300
-    window_height = 600
+    window_weight = 1300
+    window_height = 700
 
-    screen = pygame.display.set_mode((window_width, window_height))
+    # Загрузка и воспроизведение фоновой музыки
+    pygame.mixer.music.load("music.mp3")
+    pygame.mixer.music.play(-1)  # -1 означает бесконечное повторение
+    pygame.mixer.music.set_volume(0.5)  # Установка громкости на 50%
+
+    screen = pygame.display.set_mode((window_weight, window_height))
     pygame.display.set_caption("Game Example with MVC and State Management")
 
     controller = GameController()
-    controller.set_state(MainMenuState(controller, window_width, window_height))
+    controller.set_state(MainMenuState(controller, window_weight, window_height))
+
     clock = pygame.time.Clock()
     running = True
     while running:
@@ -26,15 +30,9 @@ def main():
         controller.update()
         controller.draw(screen)
 
-        # Проверка наведения для всех кнопок в текущем состоянии
-        if hasattr(controller.state, 'buttons'):
-            for button in controller.state.buttons:
-                button.check_hover()
-
         clock.tick(60)
 
     pygame.quit()
-
 
 if __name__ == "__main__":
     main()

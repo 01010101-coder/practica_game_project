@@ -31,7 +31,7 @@ class MainMenuState:
                     self.controller.set_state(ChooseModeMenu(self.controller, self.window_width, self.window_height))
                 elif action == "settings":
                     from view.settings_view import SettingsState  # ленивый импорт
-                    self.controller.set_state(SettingsState(self.controller, self.window_width, self.window_height))
+                    self.controller.set_state(SettingsState(self.controller))
                 elif action == "quit":
                     pygame.quit()
                     sys.exit()

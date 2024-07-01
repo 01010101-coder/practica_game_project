@@ -37,6 +37,11 @@ class Assassin(Hero):
     def __name__(self):
         return "Assasin"
 
+    def load_sprite(self, image_path):
+        self.sprite = pygame.image.load(image_path)
+        self.sprite = pygame.transform.scale(self.sprite, (30, 30))  # Скалирование спрайта до нужного размера
+
+
     def cast_spell(self, nearest_enemy, enemy_champ):
         second_closest = [100000, 100000]
         for enemy in enemy_champ:
