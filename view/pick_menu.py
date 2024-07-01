@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 from button import Button
 
 from model.assassin import Assassin
@@ -41,19 +42,29 @@ class PickMenuState:
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            for button in self.hero_buttons:
-                action = button.click(event)
-                if action:
-                    self.pick_hero(action)
+            if len(self.selected_heroes_team1) < 2 or len(self.selected_heroes_team2) < 2:
+                for button in self.hero_buttons:
+                    action = button.click(event)
+                    if action:
+                        self.pick_hero(action)
             if self.finish_button.click(event) == "finish":
                 self.finish_picking()
 
     def pick_hero(self, hero_class):
-        if self.current_team == 1 and len(self.selected_heroes_team1) < 3:
+        if self.current_team == 1 and len(self.selected_heroes_team1) < 2:
             self.selected_heroes_team1.append(hero_class)
             self.current_team = 2
-        elif self.current_team == 2 and len(self.selected_heroes_team2) < 3:
-            self.selected_heroes_team2.append(hero_class)
+
+            # Automatically pick a hero for team 2
+            available_for_team2 = [hero for hero in self.available_heroes if
+                                   hero not in self.selected_heroes_team1 and hero not in self.selected_heroes_team2]
+            if available_for_team2:
+                hero_class_team2 = random.choice(available_for_team2)
+                self.selected_heroes_team2.append(hero_class_team2)
+                # Disable the button for the picked hero
+                for button in self.hero_buttons:
+                    if button.feedback == hero_class_team2:
+                        button.disable()
             self.current_team = 1
 
         # Disable the button for the picked hero
@@ -74,6 +85,13 @@ class PickMenuState:
     def draw(self, screen):
         screen.blit(self.background_image, (0, 0))
 
+        # Отрисовка счета матча
+        font = pygame.font.SysFont("Arial", 36)
+        match_score_text = f"Match Score - Team 1: {self.match_scores[0]}  -  Team 2: {self.match_scores[1]}"
+        match_score_surface = font.render(match_score_text, True, pygame.Color("white"))
+        match_score_rect = match_score_surface.get_rect(center=(self.window_width // 2, 50))
+        screen.blit(match_score_surface, match_score_rect)
+
         # Отрисовка кнопок героев
         for button in self.hero_buttons:
             button.check_hover()
@@ -83,18 +101,18 @@ class PickMenuState:
         self.finish_button.show(screen)
 
         # Отрисовка выбранных героев
-        font = pygame.font.SysFont("Arial", 24)
+        small_font = pygame.font.SysFont("Arial", 24)
 
-        team1_label = font.render("Team 1:", True, pygame.Color("white"))
+        team1_label = small_font.render("Team 1:", True, pygame.Color("white"))
         screen.blit(team1_label, (50, self.window_height - 250))
         for i, hero in enumerate(self.selected_heroes_team1):
-            hero_text = font.render(hero.__name__, True, pygame.Color("white"))
+            hero_text = small_font.render(hero.__name__, True, pygame.Color("white"))
             screen.blit(hero_text, (50, self.window_height - 220 + i * 30))
 
-        team2_label = font.render("Team 2:", True, pygame.Color("white"))
+        team2_label = small_font.render("Team 2:", True, pygame.Color("white"))
         screen.blit(team2_label, (self.window_width - 200, self.window_height - 250))
         for i, hero in enumerate(self.selected_heroes_team2):
-            hero_text = font.render(hero.__name__, True, pygame.Color("white"))
+            hero_text = small_font.render(hero.__name__, True, pygame.Color("white"))
             screen.blit(hero_text, (self.window_width - 200, self.window_height - 220 + i * 30))
 
         pygame.display.flip()
