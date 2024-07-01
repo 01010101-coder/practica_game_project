@@ -9,6 +9,7 @@ from model.ranger import Ranger
 from model.healer import Healer
 from model.barbarian import Barbarian
 
+
 class PickMenuState:
     def __init__(self, controller, window_width, window_height, game_mode, match_scores=None):
         self.game_mode = game_mode
