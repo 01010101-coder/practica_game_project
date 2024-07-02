@@ -12,7 +12,7 @@ class Melee(Hero):
         self.damage = 10
         self.speed = 30
         self.attack_time = 0
-        self.range = 15
+        self.range = 30
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
@@ -20,6 +20,9 @@ class Melee(Hero):
         self.spell_time = time.time()
 
         self.team = team
+
+        self.description = "A generic hero"
+        self.sprite_path = "view/sprites/melee.png"
 
         self.attack_cooldown = 0.7  # Attack every 1 second
         self.last_attack_time = time.time()

@@ -5,6 +5,8 @@ class Hero:
     def __init__(self, x, y, team):
         self.position = [x, y]
         self.sprite = None
+        self.description = "A generic hero"
+        self.sprite_path = "view/sprites/assassin.png"
 
     def load_sprite(self, image_path):
         self.sprite = pygame.image.load(image_path)

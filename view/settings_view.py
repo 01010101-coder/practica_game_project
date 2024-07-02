@@ -16,7 +16,7 @@ class SettingsState:
         self.buttons = [
             Button("Volume Up", (300, 200), 50, feedback="volume_up"),
             Button("Volume Down", (300, 300), 50, feedback="volume_down"),
-            Button("Toggle Music", (300, 400), 50, feedback="toggle_music"),
+            Button("Stop Music", (300, 400), 50, feedback="toggle_music"),
             Button("Back", (300, 500), 50, feedback="back")
         ]
         self.selected_button = 0

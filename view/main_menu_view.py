@@ -12,11 +12,10 @@ class MainMenuState:
         self.background_image = pygame.image.load("view/background.jpg")
         self.background_image = pygame.transform.scale(self.background_image, (self.window_width, self.window_height))
 
-        # Создание кнопок
         self.buttons = [
-            Button("New Game", (int(self.window_width * 0.4), int(self.window_height * 0.3)), 50, "navy", "new_game"),
-            Button("Settings", (int(self.window_width * 0.4), int(self.window_height * 0.5)), 50, "navy", "settings"),
-            Button("Quit", (int(self.window_width * 0.4), int(self.window_height * 0.7)), 50, "navy", "quit")
+            Button("New Game", (window_width // 2 - 100, window_height // 2 - 100), 50, "navy", "new_game"),
+            Button("Settings", (window_width // 2 - 100, window_height // 2), 50, "navy", "settings"),
+            Button("Quit", (window_width // 2 - 100, window_height // 2 + 100), 50, "navy", "quit")
         ]
 
     def handle_event(self, event):
@@ -27,10 +26,10 @@ class MainMenuState:
             for button in self.buttons:
                 action = button.click(event)
                 if action == "new_game":
-                    from view.choose_mode_view import ChooseModeMenu  # ленивый импорт
-                    self.controller.set_state(ChooseModeMenu(self.controller, self.window_width, self.window_height))
+                    from view.choose_mode_view import ChooseModeState
+                    self.controller.set_state(ChooseModeState(self.controller, self.window_width, self.window_height))
                 elif action == "settings":
-                    from view.settings_view import SettingsState  # ленивый импорт
+                    from view.settings_view import SettingsState
                     self.controller.set_state(SettingsState(self.controller))
                 elif action == "quit":
                     pygame.quit()
@@ -40,11 +39,10 @@ class MainMenuState:
         pass
 
     def draw(self, screen):
-        # Отрисовка фонового изображения
         screen.blit(self.background_image, (0, 0))
 
-        # Отрисовка кнопок
         for button in self.buttons:
+            button.check_hover()
             button.show(screen)
 
         pygame.display.flip()

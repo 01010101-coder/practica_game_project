@@ -26,6 +26,9 @@ class PauseState:
             elif self.main_menu_button.click(event) == "main_menu":
                 from view.main_menu_view import MainMenuState
                 self.controller.set_state(MainMenuState(self.controller, 1300, 700))
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.controller.set_state(self.controller.previous_state)
 
     def update(self):
         pass

@@ -12,12 +12,15 @@ class Barbarian(Hero):
         self.default_speed = 50
         self.speed = self.default_speed
         self.attack_time = 0
-        self.range = 15
+        self.range = 30
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
         self.cooldown = 5
         self.spell_time = time.time()
+
+        self.description = "A generic hero"
+        self.sprite_path = "view/sprites/barbarian.png"
 
         self.team = team
 

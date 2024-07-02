@@ -12,7 +12,7 @@ class Healer(Hero):
         self.damage = 2
         self.speed = 50
         self.attack_time = 0
-        self.range = 75
+        self.range = 125
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
@@ -20,6 +20,9 @@ class Healer(Hero):
         self.spell_time = time.time()
 
         self.team = team
+
+        self.description = "A generic hero"
+        self.sprite_path = "view/sprites/healer.png"
 
         self.attack_cooldown = 1.5  # Attack every 1.5 seconds
         self.last_attack_time = time.time()

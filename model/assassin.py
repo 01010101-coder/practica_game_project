@@ -11,7 +11,7 @@ class Assassin(Hero):
         self.damage = 8
         self.speed = 10  # in ticks
         self.attack_time = 0
-        self.range = 15
+        self.range = 30
         self.move_speed = 1
         self.startpos = [x, y]
         self.position = [x, y]
@@ -19,6 +19,9 @@ class Assassin(Hero):
         self.spell_time = time.time()
 
         self.team = team
+
+        self.description = "A generic hero"
+        self.sprite_path = "view/sprites/assasin.png"
 
         self.attack_cooldown = 1.0  # Attack every 1 second
         self.last_attack_time = time.time()
