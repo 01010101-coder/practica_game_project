@@ -3,6 +3,7 @@ import sys
 from model.game_model import GameModel
 from view.pick_menu import PickMenuState
 from view.gameover_view import GameOverState
+from view.pause_view import PauseState
 
 class GameplayState:
     def __init__(self, controller, window_width, window_height, team_1, team_2, game_mode, match_scores=None):
@@ -16,6 +17,10 @@ class GameplayState:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                self.controller.previous_state = self
+                self.controller.set_state(PauseState(self.controller, self.view.window_width, self.view.window_height))
 
     def update(self):
         match_over = self.model.update()
